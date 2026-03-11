@@ -25,6 +25,23 @@ export function ProfilePage() {
   const approveRequest = useApproveCommunityRequest();
   const rejectRequest = useRejectCommunityRequest();
   const [isSavedVersesOpen, setIsSavedVersesOpen] = useState(false);
+  const [testNotifStatus, setTestNotifStatus] = useState<string | null>(null);
+  const [testNotifLoading, setTestNotifLoading] = useState(false);
+
+  const handleTestNotification = useCallback(async () => {
+    if (!user?.id) return;
+    setTestNotifLoading(true);
+    setTestNotifStatus(null);
+    try {
+      await initPushNotifications({ userId: user.id, churchId: user.church_id });
+      await notificationService.sendTestNotification(user.id);
+      setTestNotifStatus('Enviada. Revisa si llegó (puede tardar unos segundos).');
+    } catch (e) {
+      setTestNotifStatus(`Error: ${e instanceof Error ? e.message : String(e)}`);
+    } finally {
+      setTestNotifLoading(false);
+    }
+  }, [user?.id, user?.church_id]);
 
   const completedReads = useMemo(() => progress.filter((item) => item.completed).length, [progress]);
   const pendingRequests = useMemo(() => requests.filter((r) => r.status === 'pending'), [requests]);
