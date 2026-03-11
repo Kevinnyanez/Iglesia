@@ -49,7 +49,15 @@ async function ensureCurrentUserProfile(): Promise<AppUser | null> {
     .single();
 
   if (insertError) {
-    // Do not block auth session if profile auto-provision is blocked by RLS/policies.
+    const isConflict = insertError.code === '23505' || /409|duplicate|already exists/i.test(insertError.message ?? '');
+    if (isConflict) {
+      const { data: fallback } = await supabase
+        .from('users')
+        .select('id, email, name, avatar, church_id, is_platform_admin, can_create_community')
+        .eq('id', authData.user.id)
+        .maybeSingle();
+      return fallback as AppUser | null;
+    }
     return null;
   }
   return insertedProfile as AppUser;

@@ -114,18 +114,28 @@ export function useRealtimePosts() {
     const supabase = getSupabaseClient();
     if (!supabase) return;
 
+    const invalidateAllPosts = () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.homeFeed });
+      queryClient.invalidateQueries({ queryKey: queryKeys.globalFeed });
+      queryClient.invalidateQueries({ queryKey: queryKeys.forYouFeed });
+      queryClient.invalidateQueries({ predicate: (q) => (q.queryKey as string[])[0] === 'posts' });
+    };
+
     const channel = supabase
       .channel('posts-live-feed')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, () => {
-        queryClient.invalidateQueries({ queryKey: queryKeys.homeFeed });
-        queryClient.invalidateQueries({ queryKey: queryKeys.globalFeed });
-        queryClient.invalidateQueries({ queryKey: queryKeys.forYouFeed });
-        queryClient.invalidateQueries({ predicate: (q) => (q.queryKey as string[])[0] === 'posts' });
-      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, invalidateAllPosts)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'post_likes' }, invalidateAllPosts)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'comments' }, invalidateAllPosts)
       .subscribe();
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') invalidateAllPosts();
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
 
     return () => {
       supabase.removeChannel(channel);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   }, [queryClient]);
 }

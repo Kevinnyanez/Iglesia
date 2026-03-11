@@ -26,8 +26,13 @@ El frontend llama a las Edge Functions de Supabase:
 
 **Pasos para activar:**
 1. Ejecutar `supabase/migrations/notification_subscriptions.sql` en el SQL Editor
-2. Desplegar ambas funciones en Supabase (Dashboard o CLI: `supabase functions deploy notifications-register` y `supabase functions deploy notifications-event`)
-3. El frontend ya usa `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` para llamarlas
+2. Desplegar ambas funciones en Supabase
+3. **Push real:** En Firebase Console → Project Settings → Service Accounts → Generate new private key. Luego en Supabase → Edge Functions → Secrets, agregar:
+   - `FIREBASE_SERVICE_ACCOUNT_JSON` = contenido del JSON descargado (como string)
+   - `FIREBASE_PROJECT_ID` = tu project ID (ej. biblia-app-97be8)
+4. El frontend ya usa `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`
+
+**Realtime (likes al instante):** En Supabase Dashboard → Database → Replication, habilitar replicación para `posts`, `post_likes` y `comments`. Sin esto, los likes no se actualizan en tiempo real en PWA.
 
 ### Opción 2: Vercel Serverless (API Routes)
 
@@ -60,5 +65,21 @@ En Supabase: usar `pg_cron` + `pg_net` para invocar una Edge Function a esa hora
 
 ## Variables de entorno
 
-- `VITE_FIREBASE_VAPID_KEY` – clave VAPID de Firebase (frontend)
+- `VITE_FIREBASE_VAPID_KEY` – **clave VAPID** de Firebase (frontend). **No** uses el Measurement ID (G-XXXXX). La VAPID está en Firebase Console → Project Settings → Cloud Messaging → Web Push certificates → Generate key pair. Es una cadena larga tipo base64.
 - En el backend: credenciales de Firebase Admin (service account JSON)
+
+## Vercel
+
+En Vercel solo necesitas las mismas variables de entorno que en local (`.env`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_FIREBASE_*`. Las Edge Functions de notificaciones corren en Supabase, no en Vercel.
+
+## Troubleshooting
+
+**No llegan notificaciones push:**
+1. ¿Aceptaste permisos de notificación en el navegador/PWA?
+2. ¿Está `FIREBASE_SERVICE_ACCOUNT_JSON` en Supabase Edge Functions → Secrets?
+3. ¿La tabla `notification_subscriptions` tiene tu token? (revisar en SQL Editor)
+4. ¿Las Edge Functions están desplegadas? Probar: `curl -X POST TU_URL/functions/v1/notifications-event -H "Content-Type: application/json" -d '{"type":"new_post","postId":"test"}'`
+
+**Likes no aparecen hasta salir/entrar (PWA):**
+- Se agregó refetch automático al volver a la app (`visibilitychange`)
+- Habilitar replicación de `post_likes` en Supabase → Database → Replication

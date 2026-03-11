@@ -93,6 +93,7 @@ export const commentsService = {
         type: 'new_comment',
         postId: payload.post_id,
         receiverUserId: postAuthor.author_id,
+        likerUserId: user.id,
       });
     }
 

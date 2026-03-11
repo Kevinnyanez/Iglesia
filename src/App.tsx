@@ -1,9 +1,12 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useAuth } from './hooks/useAuth';
 import { AppLayout } from './layouts/AppLayout';
 import { initPushNotifications } from './pwa/notifications';
+import { notificationService } from './services/notification.service';
+import { queryKeys } from './utils/queryKeys';
 
 const HomeFeedPage = lazy(() => import('./pages/HomeFeedPage').then((module) => ({ default: module.HomeFeedPage })));
 const ForYouPage = lazy(() => import('./pages/ForYouPage').then((module) => ({ default: module.ForYouPage })));
@@ -22,6 +25,7 @@ const RegisterPage = lazy(() => import('./pages/RegisterPage').then((module) => 
 
 function App() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!user?.id) return;
@@ -32,6 +36,16 @@ function App() {
       console.warn('Push notifications init failed.', error);
     });
   }, [user?.church_id, user?.id]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    notificationService.onForegroundMessage(() => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.homeFeed });
+      queryClient.invalidateQueries({ queryKey: queryKeys.globalFeed });
+      queryClient.invalidateQueries({ queryKey: queryKeys.forYouFeed });
+      queryClient.invalidateQueries({ predicate: (q) => (q.queryKey as string[])[0] === 'posts' });
+    });
+  }, [user?.id, queryClient]);
 
   return (
     <Routes>

@@ -124,12 +124,14 @@ export const postsService = {
         type: 'new_church_post',
         communityId: payload.church_id,
         postId: data.id,
+        authorId: user.id,
       });
     } else {
       void notificationService.notifyEvent({
         type: 'new_post',
         postId: data.id,
         visibility: 'global',
+        authorId: user.id,
       });
     }
 
