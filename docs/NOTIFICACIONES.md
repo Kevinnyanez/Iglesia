@@ -14,19 +14,20 @@ El frontend ya envía eventos de notificación cuando ocurren estas acciones:
 | `goal_reminder` | Recordatorio: meta por terminar el día | (requiere cron) |
 | `new_direct_message` | Mensaje directo | `chatId`, `receiverUserId` |
 
-## Lo que falta: backend
+## Backend: Supabase Edge Functions (implementado)
 
-El frontend llama a:
-- `POST /api/notifications/register` – registrar token FCM del usuario
-- `POST /api/notifications/event` – enviar evento (nuevo post, like, comentario, etc.)
+El frontend llama a las Edge Functions de Supabase:
+- `POST .../functions/v1/notifications-register` – registrar token FCM
+- `POST .../functions/v1/notifications-event` – enviar evento (post, like, comentario)
 
-**No hay backend implementado.** Las llamadas devuelven 404. Para que las notificaciones funcionen necesitas:
+**Archivos creados:**
+1. `supabase/functions/notifications-register/index.ts` – guarda el token en `notification_subscriptions`
+2. `supabase/functions/notifications-event/index.ts` – recibe el evento y busca tokens de destinatarios
 
-### Opción 1: Supabase Edge Functions
-
-1. Crear `supabase/functions/notifications-register/index.ts` que guarde el token en `notification_subscriptions`
-2. Crear `supabase/functions/notifications-event/index.ts` que reciba el evento, busque los tokens de los destinatarios y envíe push con Firebase Admin SDK
-3. Configurar proxy en Vercel o usar la URL de Supabase Functions directamente
+**Pasos para activar:**
+1. Ejecutar `supabase/migrations/notification_subscriptions.sql` en el SQL Editor
+2. Desplegar ambas funciones en Supabase (Dashboard o CLI: `supabase functions deploy notifications-register` y `supabase functions deploy notifications-event`)
+3. El frontend ya usa `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` para llamarlas
 
 ### Opción 2: Vercel Serverless (API Routes)
 

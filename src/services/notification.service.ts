@@ -66,9 +66,15 @@ export const notificationService = {
   },
 
   async registerTokenInBackend(payload: NotificationSubscriptionPayload): Promise<void> {
-    const response = await fetch('/api/notifications/register', {
+    const baseUrl = getOptionalEnv('VITE_SUPABASE_URL');
+    const anonKey = getOptionalEnv('VITE_SUPABASE_ANON_KEY');
+    const url = baseUrl ? `${baseUrl}/functions/v1/notifications-register` : '/api/notifications/register';
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (anonKey) headers['Authorization'] = `Bearer ${anonKey}`;
+
+    const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(payload),
     });
 
@@ -78,9 +84,15 @@ export const notificationService = {
   },
 
   async notifyEvent(payload: NotificationEventPayload): Promise<void> {
-    const response = await fetch('/api/notifications/event', {
+    const baseUrl = getOptionalEnv('VITE_SUPABASE_URL');
+    const anonKey = getOptionalEnv('VITE_SUPABASE_ANON_KEY');
+    const url = baseUrl ? `${baseUrl}/functions/v1/notifications-event` : '/api/notifications/event';
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (anonKey) headers['Authorization'] = `Bearer ${anonKey}`;
+
+    const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(payload),
     });
 
