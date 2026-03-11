@@ -27,6 +27,12 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
@@ -37,6 +43,11 @@ body {
   min-height: 100vh;
   background: var(--app-bg);
   color: var(--text-primary);
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 @layer components {
@@ -103,5 +114,15 @@ body {
 
   .font-heading {
     font-family: var(--font-heading);
+  }
+
+  .modal-overlay {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .modal-content {
+    max-width: min(36rem, calc(100vw - 1.5rem));
+    flex-shrink: 0;
   }
 }

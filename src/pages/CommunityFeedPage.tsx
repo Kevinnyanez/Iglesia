@@ -145,8 +145,8 @@ export function CommunityFeedPage() {
       </div>
 
       {isComposerOpen ? (
-        <div className="fixed inset-0 z-50 flex items-end bg-black/50 p-3 md:items-center md:justify-center">
-          <div className="w-full max-w-xl rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xl md:p-5">
+        <div className="modal-overlay fixed inset-0 z-50 flex items-end bg-black/50 p-3 md:items-center md:justify-center">
+          <div className="modal-content w-full max-w-xl rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xl md:p-5">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-slate-900">Publicar en comunidad</h2>
               <button type="button" className="btn-ghost px-2" onClick={() => setIsComposerOpen(false)}>
@@ -515,8 +515,8 @@ function EditCommunityModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end bg-black/50 p-3 md:items-center md:justify-center">
-      <div className="w-full max-w-xl rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xl md:p-5">
+    <div className="modal-overlay fixed inset-0 z-50 flex items-end bg-black/50 p-3 md:items-center md:justify-center">
+      <div className="modal-content w-full max-w-xl rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xl md:p-5">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-slate-900">Editar comunidad</h2>
           <button type="button" className="btn-ghost rounded-full p-2" onClick={onClose}>

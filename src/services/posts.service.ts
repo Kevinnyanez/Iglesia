@@ -125,6 +125,12 @@ export const postsService = {
         communityId: payload.church_id,
         postId: data.id,
       });
+    } else {
+      void notificationService.notifyEvent({
+        type: 'new_post',
+        postId: data.id,
+        visibility: 'global',
+      });
     }
 
     return mapPostWithMeta(data as unknown as RawPostRow, user.id);
@@ -474,6 +480,20 @@ export const postsService = {
     } = await supabase.auth.getUser();
     if (userError) throw userError;
     if (!user) throw new Error('User is not authenticated');
+
+    const { data: post, error: postError } = await supabase
+      .from('posts')
+      .select('author_id')
+      .eq('id', postId)
+      .single();
+    if (!postError && post?.author_id && post.author_id !== user.id) {
+      void notificationService.notifyEvent({
+        type: 'new_like',
+        postId,
+        receiverUserId: post.author_id,
+        likerUserId: user.id,
+      });
+    }
 
     const { error } = await supabase.from('post_likes').insert({
       post_id: postId,

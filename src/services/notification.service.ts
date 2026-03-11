@@ -3,7 +3,15 @@ import { getFirebaseMessaging } from './firebase';
 import { getOptionalEnv } from '../utils/env';
 import { ensureFirebaseMessagingServiceWorker } from '../pwa/firebase-sw';
 
-export type NotificationEventType = 'daily_verse' | 'new_comment' | 'new_church_post' | 'goal_completed' | 'new_direct_message';
+export type NotificationEventType =
+  | 'daily_verse'
+  | 'new_comment'
+  | 'new_church_post'
+  | 'new_post'
+  | 'new_like'
+  | 'goal_completed'
+  | 'goal_reminder'
+  | 'new_direct_message';
 
 export interface NotificationSubscriptionPayload {
   token: string;

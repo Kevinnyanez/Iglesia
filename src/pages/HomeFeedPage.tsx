@@ -127,8 +127,8 @@ export function HomeFeedPage() {
         />
 
         {isComposerOpen ? (
-          <div className="fixed inset-0 z-50 flex items-end bg-black/50 p-3 sm:items-center sm:justify-center">
-            <div className="w-full max-w-xl rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xl sm:p-5">
+          <div className="modal-overlay fixed inset-0 z-50 flex items-end bg-black/50 p-3 sm:items-center sm:justify-center">
+            <div className="modal-content w-full max-w-xl rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xl sm:p-5">
               <div className="mb-3 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-slate-900">Crear publicación</h2>
                 <button

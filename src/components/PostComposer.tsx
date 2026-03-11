@@ -73,9 +73,9 @@ export function PostComposer({
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3 rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
+    <form onSubmit={onSubmit} className="min-w-0 space-y-3 rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
       <textarea
-        className="min-h-28 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+        className="min-h-28 min-w-0 w-full max-w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-3 text-base text-slate-900 placeholder:text-slate-500 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 sm:text-sm"
         value={content}
         onChange={(event) => setContent(event.target.value)}
         placeholder="Comparte tu reflexión (opcional)..."
