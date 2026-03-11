@@ -75,10 +75,12 @@ En Vercel solo necesitas las mismas variables de entorno que en local (`.env`): 
 ## Troubleshooting
 
 **No llegan notificaciones push:**
-1. ¿Aceptaste permisos de notificación en el navegador/PWA?
-2. ¿Está `FIREBASE_SERVICE_ACCOUNT_JSON` en Supabase Edge Functions → Secrets?
-3. ¿La tabla `notification_subscriptions` tiene tu token? (revisar en SQL Editor)
-4. ¿Las Edge Functions están desplegadas? Probar: `curl -X POST TU_URL/functions/v1/notifications-event -H "Content-Type: application/json" -d '{"type":"new_post","postId":"test"}'`
+1. **Probar notificación:** En Perfil → sección "Notificaciones" → "Probar notificación". Si pide permiso, acéptalo.
+2. **Consola del navegador:** Busca `[Notificaciones]` — si ves "Permiso denegado" o "VAPID key inválida", ese es el problema.
+3. **Token registrado:** En Supabase SQL Editor: `SELECT * FROM notification_subscriptions;` — debe haber filas con tu `user_id`.
+4. **Secrets:** Supabase → Edge Functions → Secrets → `FIREBASE_SERVICE_ACCOUNT_JSON` debe existir (JSON del Service Account).
+5. **Logs de la función:** Supabase → Edge Functions → notifications-event → Logs. Si ves "Sin credenciales Firebase", falta el secret.
+6. **HTTPS:** Las push solo funcionan en HTTPS (o localhost).
 
 **Likes no aparecen hasta salir/entrar (PWA):**
 - Se agregó refetch automático al volver a la app (`visibilitychange`)

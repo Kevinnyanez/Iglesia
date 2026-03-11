@@ -13,6 +13,8 @@ import {
   useRejectCommunityRequest,
 } from '../hooks/useCommunityRequests';
 import { SavedVersesModal } from '../components/SavedVersesModal';
+import { initPushNotifications } from '../pwa/notifications';
+import { notificationService } from '../services/notification.service';
 
 export function ProfilePage() {
   const { user } = useAuth();
@@ -119,6 +121,23 @@ export function ProfilePage() {
           )}
         </section>
       ) : null}
+      <section className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
+        <h2 className="mb-2 font-semibold text-slate-900">Notificaciones</h2>
+        <p className="mb-3 text-sm text-slate-600">Prueba si las notificaciones push funcionan.</p>
+        <button
+          type="button"
+          className="btn-primary"
+          onClick={handleTestNotification}
+          disabled={testNotifLoading}
+        >
+          {testNotifLoading ? 'Enviando...' : 'Probar notificación'}
+        </button>
+        {testNotifStatus ? (
+          <p className={`mt-2 text-sm ${testNotifStatus.startsWith('Error') ? 'text-red-600' : 'text-slate-600'}`}>
+            {testNotifStatus}
+          </p>
+        ) : null}
+      </section>
       <section className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
         <h2 className="mb-2 font-semibold text-slate-900">Progreso de lectura</h2>
         <p className="text-slate-700">Registros completados: {completedReads}</p>

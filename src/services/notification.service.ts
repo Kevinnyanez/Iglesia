@@ -11,7 +11,8 @@ export type NotificationEventType =
   | 'new_like'
   | 'goal_completed'
   | 'goal_reminder'
-  | 'new_direct_message';
+  | 'new_direct_message'
+  | 'test';
 
 export interface NotificationSubscriptionPayload {
   token: string;
@@ -32,6 +33,7 @@ export const notificationService = {
 
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') {
+      console.info('[Notificaciones] Permiso denegado:', permission);
       return null;
     }
 
@@ -42,6 +44,7 @@ export const notificationService = {
 
     const vapidKey = getOptionalEnv('VITE_FIREBASE_VAPID_KEY');
     if (!vapidKey || vapidKey.length < 80) {
+      console.warn('[Notificaciones] VAPID key inválida o faltante (debe tener 80+ caracteres)');
       return null;
     }
 
@@ -81,6 +84,10 @@ export const notificationService = {
     if (!response.ok) {
       throw new Error(`Failed to register notification token. Status: ${response.status}`);
     }
+  },
+
+  async sendTestNotification(userId: string): Promise<void> {
+    return this.notifyEvent({ type: 'test', userId });
   },
 
   async notifyEvent(payload: NotificationEventPayload): Promise<void> {
