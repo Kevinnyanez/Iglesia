@@ -350,7 +350,7 @@ function ActivitiesSection({
 
 function MeetingOrPrayerCard({
   item,
-  label,
+  label: _label,
   expandedId,
   onToggle,
 }: {

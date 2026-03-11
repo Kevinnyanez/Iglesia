@@ -14,8 +14,13 @@ export function CreatePostPage() {
   const initialCommunityId = useMemo(() => searchParams.get('communityId') ?? '', [searchParams]);
 
   return (
-    <div className="mx-auto max-w-2xl space-y-4 p-4 pb-24">
-      <h1 className="text-xl font-semibold text-slate-900">Crear publicación</h1>
+    <div className="pb-24 md:pb-6">
+      <header className="sticky top-0 z-10 border-b border-slate-200/80 bg-white/95 backdrop-blur-sm">
+        <div className="mx-auto max-w-2xl px-4 py-3 sm:px-4 md:max-w-5xl">
+          <h1 className="text-lg font-bold text-slate-900 sm:text-xl md:text-2xl">Crear publicación</h1>
+        </div>
+      </header>
+      <div className="mx-auto max-w-2xl space-y-4 p-4 sm:p-4 md:max-w-5xl md:px-4">
       <PostComposer
         initialVerseReference={initialVerseReference}
         initialContent={initialContent}
@@ -23,6 +28,7 @@ export function CreatePostPage() {
         initialVisibility={initialVisibility}
         initialCommunityId={initialCommunityId}
       />
+      </div>
     </div>
   );
 }

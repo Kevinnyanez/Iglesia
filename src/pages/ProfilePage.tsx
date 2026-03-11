@@ -41,11 +41,11 @@ export function ProfilePage() {
   return (
     <div className="pb-24 md:pb-6">
       <header className="sticky top-0 z-10 border-b border-slate-200/80 bg-white/95 backdrop-blur-sm">
-        <div className="mx-auto max-w-5xl px-4 py-3">
-          <h1 className="text-xl font-bold text-slate-900 md:text-2xl">Perfil</h1>
+        <div className="mx-auto max-w-2xl px-4 py-3 sm:px-4 md:max-w-5xl">
+          <h1 className="text-lg font-bold text-slate-900 sm:text-xl md:text-2xl">Perfil</h1>
         </div>
       </header>
-      <div className="mx-auto max-w-5xl space-y-4 p-4">
+      <div className="mx-auto max-w-2xl space-y-4 p-4 sm:p-4 md:max-w-5xl md:px-4">
       <section className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-start gap-4">
           <ImageUpload

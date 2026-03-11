@@ -251,7 +251,7 @@ export const communityService = {
 
     return (data ?? [])
       .map((item) => (Array.isArray(item.churches) ? item.churches[0] : item.churches))
-      .filter((value): value is Church => Boolean(value));
+      .filter(Boolean) as Church[];
   },
 
   async fetchCommunityMembers(communityId: string): Promise<CommunityMember[]> {

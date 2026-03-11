@@ -27,15 +27,16 @@ export function LoginPage() {
   };
 
   return (
-    <div className="mx-auto max-w-md rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-      <h1 className="mb-4 text-2xl font-semibold text-slate-900">Iniciar sesión</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--app-bg)] p-4">
+      <div className="w-full max-w-md rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm">
+        <h1 className="mb-4 text-xl font-semibold text-slate-900 sm:text-2xl">Iniciar sesión</h1>
       <form onSubmit={onSubmit} className="space-y-3">
         <input
           type="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="Correo electrónico"
-          className="w-full rounded-md border border-slate-300 px-3 py-2"
+          className="w-full rounded-full border border-slate-200 bg-slate-50/80 px-4 py-2.5 text-sm focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           required
         />
         <input
@@ -43,11 +44,11 @@ export function LoginPage() {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           placeholder="Contraseña"
-          className="w-full rounded-md border border-slate-300 px-3 py-2"
+          className="w-full rounded-full border border-slate-200 bg-slate-50/80 px-4 py-2.5 text-sm focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           required
         />
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
-        <button type="submit" className="btn-primary w-full">
+        <button type="submit" className="btn-primary w-full rounded-full py-2.5">
           Entrar
         </button>
       </form>
@@ -57,6 +58,7 @@ export function LoginPage() {
           Regístrate
         </Link>
       </p>
+      </div>
     </div>
   );
 }
